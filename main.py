@@ -67,7 +67,7 @@ INVERSIONUSD = get_inversion()
 FRECSTATS = 12
 
 # Lista de usuarios que pueden chatear con el bot
-usuarios = ['1783707249', '979088442']
+usuarios = ['1783707249', '979088442', '1247695479']
 
 ## Estadisticas
 listaEstadisticas = []
