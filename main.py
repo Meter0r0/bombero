@@ -325,13 +325,13 @@ def worker_bombero(ticker, update) -> None:
 
             # VEO SI SE CRUZA
 
-            if (ema5_old<ema20_old and ema5>ema20 ) or ( ema20_old<ema5_old and ema20>ema5):
-                manda_msj(update, "Cruce de ema 5 y 20", ticker, 0, True)
+            if (ema5_old<ema20_old and ema5>ema20) or (ema20_old<ema5_old and ema20>ema5):
+                manda_msj(update, "CRUCE de ema 5 y 20!!!", ticker, 0, True)
 
             # pendiente de la ema15
             if ema15_old != 0 :
-                pen = (ema15-ema15_old)/ema15_old
-                manda_msj(update, "Pendiente ema15: {0:.2f}".format(pen), ticker, 0, True)
+                pen = ((ema15-ema15_old)*100)/ema15_old
+                manda_msj(update, "Pendiente ema15: {0:.2f}%".format(pen), ticker, 0, True)
 
             ema5_old = ema5
             ema15_old = ema15
@@ -339,9 +339,6 @@ def worker_bombero(ticker, update) -> None:
 
         except Exception as ext:
             manda_msj(update, "Algo Fallo. salteo ciclo." + str(ext), ticker, 0, True)
-            ema5_old = ema5
-            ema15_old = ema15
-            ema20_old = ema20
 
         # Sincroniza tiempo cada 5 minutos y 3 segundos.
         ahora = datetime.now()
