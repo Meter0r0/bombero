@@ -329,8 +329,9 @@ def worker_bombero(ticker, update) -> None:
                 manda_msj(update, "Cruce de ema 5 y 20", ticker, 0, True)
 
             # pendiente de la ema15
-            pen = (ema15-ema15_old)/ema15_old
-            manda_msj(update, "Pendiente ema15: {0:.2f}".format(pen), ticker, 0, True)
+            if ema15_old != 0 :
+                pen = (ema15-ema15_old)/ema15_old
+                manda_msj(update, "Pendiente ema15: {0:.2f}".format(pen), ticker, 0, True)
 
             ema5_old = ema5
             ema15_old = ema15
