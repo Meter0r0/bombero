@@ -1,0 +1,9 @@
+ENVIROMENTS:
+  COMMON: &common
+        HASH_BOT: 6469721370:AAFBysi9XkU3eAbQ5R-IY1xjEpsD2EW5_yQ
+        PATH: /Users/mete0r0/codigo/bombero
+        INVERSION: 10
+        API_KEY: y6L8Prb1oVB6JEkBKVLnqYk01No7tiaqHTcexhTGi6O9OTMXW8QZLjG18Lwbg5OP
+        API_SECRET: a5jdnuom9nnVXUtcf07QJBCAJJLbvsyDdVek9voRJ5MlRF952SytGAoJGNrTdxSc
+
+        
