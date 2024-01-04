@@ -336,9 +336,11 @@ def worker_bombero(ticker, update) -> None:
             ema15_old = ema15
             ema20_old = ema20
 
-
         except Exception as ext:
             manda_msj(update, "Algo Fallo. salteo ciclo." + str(ext), ticker, 0, True)
+            ema5_old = ema5
+            ema15_old = ema15
+            ema20_old = ema20
 
         # Sincroniza tiempo cada 5 minutos y 3 segundos.
         ahora = datetime.now()
