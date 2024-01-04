@@ -323,20 +323,18 @@ def worker_bombero(ticker, update) -> None:
             manda_msj( update, "Ema5: {0:.4f}".format(ema5)+ ", Ema15: {0:.4f}".format(ema15)
                       +", Ema20: {0:.4f}".format(ema20), ticker, 0, True)
 
-            #VEO SI SE CRUZA
-
-            ema5_old = ema5
-            ema15_old = ema15
-            ema20_old = ema20
+            # VEO SI SE CRUZA
 
             if (ema5_old<ema20_old and ema5>ema20 ) or ( ema20_old<ema5_old and ema20>ema5):
                 manda_msj(update, "Cruce de ema 5 y 20", ticker, 0, True)
 
             # pendiente de la ema15
-
-            pen = 0
             pen = (ema15-ema15_old)/ema15_old
             manda_msj(update, "Pendiente ema15: {0:.2f}".format(pen), ticker, 0, True)
+
+            ema5_old = ema5
+            ema15_old = ema15
+            ema20_old = ema20
 
 
         except Exception as ext:
