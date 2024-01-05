@@ -3,6 +3,7 @@
 
 import logging.handlers
 import re
+import talib
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from telegram import Update
 import threading
@@ -16,6 +17,7 @@ from precio import *
 import time
 import math
 from binance.enums import *
+import numpy
 
 
 def get_path_bot():
@@ -300,9 +302,15 @@ def get_stopHilo(nombreHilo):
         return False
 
 
+#def get_ema(length, klines):
+#    closes = [float(entry[4]) for entry in klines]
+#    return sum(closes[-length:]) / length
+
 def get_ema(length, klines):
     closes = [float(entry[4]) for entry in klines]
-    return sum(closes[-length:]) / length
+    list = closes[-50:]
+    ema = talib.EMA(numpy.array(list), length)
+    return float(ema[len(ema)-1])
 
 
 def worker_bombero(ticker, update) -> None:
@@ -322,7 +330,7 @@ def worker_bombero(ticker, update) -> None:
             ema20 = get_ema(20, klines)
 
             manda_msj(update, "\nEma5: {0:.4f}".format(ema5)+ "\nEma15: {0:.4f}".format(ema15)
-                      +"\nEma20: {0:.4f}".format(ema20), ticker, 0, False)
+                      +"\nEma20: {0:.4f}".format(ema20), ticker, 0, True)
 
             # VEO SI SE CRUZA
             if (ema5_old<ema20_old and ema5>ema20):
@@ -340,9 +348,6 @@ def worker_bombero(ticker, update) -> None:
                     # pen = ((ema15-ema15_old)*100)/ema15_old
                     angulo = math.atan((ema15 - ema15_old)) * 57.3
                     manda_msj(update, "Ema15 Angulo: {0:.0f}°".format(angulo), ticker, 0, True)
-
-
-
 
             ema5_old = ema5
             ema15_old = ema15
@@ -540,6 +545,7 @@ def cruce(update: Update, context: CallbackContext) -> None:
 
     except BinanceAPIException as e:
         manda_msj(update, "Fallo la consulta de ordenes a Binance." + e.message, ticker, 0, True)
+
 
 def main() -> None:
     f = Figlet(font='slant')
