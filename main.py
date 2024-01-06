@@ -306,8 +306,7 @@ def get_stopHilo(nombreHilo):
 #    closes = [float(entry[4]) for entry in klines]
 #    return sum(closes[-length:]) / length
 
-def get_ema(length, klines):
-    closes = [float(entry[4]) for entry in klines]
+def get_ema(length, closes):
     list = closes[-50:]
     ema = talib.EMA(numpy.array(list), length)
     return float(ema[len(ema)-1])
@@ -325,29 +324,24 @@ def worker_bombero(ticker, update) -> None:
         iteraciones = iteraciones + 1
         try:
             klines = client.get_klines(symbol=ticker+MONEDA, interval=Client.KLINE_INTERVAL_5MINUTE)
-            ema5 = get_ema(5, klines)
-            ema15 = get_ema(15, klines)
-            ema20 = get_ema(20, klines)
+            closes = [float(entry[4]) for entry in klines]
+            precio = closes[-1:]
+
+            ema5 = get_ema(5, closes)
+            ema15 = get_ema(15, closes)
+            ema20 = get_ema(20, closes)
 
             manda_msj(update, "\nEma5: {0:.4f}".format(ema5)+ "\nEma15: {0:.4f}".format(ema15)
-                      +"\nEma20: {0:.4f}".format(ema20), ticker, 0, True)
+                      +"\nEma20: {0:.4f}".format(ema20), ticker, 0, False)
 
             # VEO SI SE CRUZA
-            if (ema5_old<ema20_old and ema5>ema20):
-                manda_msj(update, "*** CRUCE de ema5 sobre la ema20!!!", ticker, 0, True)
-                # pendiente de la ema15
-                if ema15_old != 0:
-                    # pen = ((ema15-ema15_old)*100)/ema15_old
-                    angulo = math.atan((ema15 - ema15_old)) * 57.3
-                    manda_msj(update, "Ema15 Angulo: {0:.0f}°".format(angulo), ticker, 0, True)
+            if ema15_old != 0:
+                angulo = math.atan((ema15 - ema15_old)) * 57.3
+                manda_msj(update, "Ema15 Angulo: {0:.0f}°".format(angulo), ticker, 0, False)
 
-            elif (ema20_old<ema5_old and ema20>ema5):
-                manda_msj(update, "*** CRUCE de ema20 sobre la ema5!!!", ticker, 0, True)
-                # pendiente de la ema15
-                if ema15_old != 0:
-                    # pen = ((ema15-ema15_old)*100)/ema15_old
-                    angulo = math.atan((ema15 - ema15_old)) * 57.3
-                    manda_msj(update, "Ema15 Angulo: {0:.0f}°".format(angulo), ticker, 0, True)
+            if ema5_old < ema20_old and ema5 > ema20 and angulo > 45:
+                manda_msj(update, "*** COMPRA EN PRECIO. usd{0:.4f}".format(precio) +
+                          ", angulo ema15 {0:.0f}".format(angulo), ticker, 0, True)
 
             ema5_old = ema5
             ema15_old = ema15
