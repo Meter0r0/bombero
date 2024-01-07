@@ -325,7 +325,7 @@ def worker_bombero(ticker, update) -> None:
         try:
             klines = client.get_klines(symbol=ticker+MONEDA, interval=Client.KLINE_INTERVAL_5MINUTE)
             closes = [float(entry[4]) for entry in klines]
-            precio = closes[-1:]
+            precio = closes[-1:][0]
 
             ema5 = get_ema(5, closes)
             ema15 = get_ema(15, closes)
